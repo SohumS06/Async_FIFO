@@ -9,4 +9,5 @@ sim_build/
 __pycache__/
 *.vcd
 venv/
+.venv/
 results.xml

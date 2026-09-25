@@ -1,6 +1,6 @@
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge, ReadOnly
+from cocotb.triggers import RisingEdge, ReadOnly, ReadWrite
 import random
 
 
@@ -46,6 +46,7 @@ async def do_write(dut, data):
     dut.wr_data.value = data
     dut.wr_en.value = 1
     await RisingEdge(dut.wr_clk)
+    await ReadWrite()
     dut.wr_en.value = 0
 
 
@@ -54,6 +55,7 @@ async def do_read(dut):
     await ReadOnly()
     data = int(dut.rd_data.value)
     await RisingEdge(dut.rd_clk)
+    await ReadWrite()
     dut.rd_en.value = 0
     return data
 
@@ -104,6 +106,7 @@ async def test_scoreboard_random(dut):
         nonlocal writes_done
         while writes_done < total_writes:
             await RisingEdge(dut.wr_clk)
+            await ReadWrite()
             if dut.full.value == 1 or random.random() < 0.5:
                 continue
             data = random.randint(0, 255)
@@ -118,6 +121,7 @@ async def test_scoreboard_random(dut):
         nonlocal reads_done
         while reads_done < total_writes:
             await RisingEdge(dut.rd_clk)
+            await ReadWrite()
             if dut.empty.value == 1 or reads_done >= writes_done or random.random() < 0.5:
                 continue
             dut.rd_en.value = 1
@@ -149,6 +153,7 @@ async def test_back_to_back_streaming(dut):
     for i in range(DEPTH):
         dut.wr_data.value = i
         await RisingEdge(dut.wr_clk)
+    await ReadWrite()
     dut.wr_en.value = 0
 
     assert dut.full.value == 1
@@ -160,6 +165,7 @@ async def test_back_to_back_streaming(dut):
         await ReadOnly()
         results.append(int(dut.rd_data.value))
         await RisingEdge(dut.rd_clk)
+    await ReadWrite()
     dut.rd_en.value = 0
 
     assert results == list(range(DEPTH)), f"streamed read mismatch: {results}"
