@@ -19,6 +19,10 @@ WAVES ?= 1
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
 waves: sim
-	python3 render_waveforms.py $(PWD)/sim_build/dump.vcd
+	fst2vcd sim_build/Asynch_FIFO.fst -o sim_build/Asynch_FIFO.vcd
+	python3 render_waveforms.py sim_build/Asynch_FIFO.vcd
 
-.PHONY: waves
+docs-waveforms:
+	./generate_waveforms.sh
+
+.PHONY: waves docs-waveforms
