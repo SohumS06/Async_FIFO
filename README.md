@@ -2,7 +2,7 @@
 
 The RTL and its logic here are hand-written by me. AI assistance filled in the rest of the test coverage.
 
-This is a dual-clock (asynchronous) FIFO with an AXI4-Stream wrapper on top of it, so it can drop into anything expecting a standard AXIS handshake instead of raw read/write enables, with the write and read sides running on independent clocks.
+This is a dual-clock (asynchronous) FIFO with an AXI4-Stream wrapper on top of it, with the write and read sides running on independent clocks.
 
 ## What's in here
 
@@ -38,3 +38,9 @@ make
 **Pointer wraparound** — three full fill/drain rounds back to back, enough for both pointers to wrap past the top of the buffer twice. Data stays consistent across the wrap, which is the whole point of using a pointer MSB instead of a separate counter for the full/empty logic.
 
 ![Pointer wraparound](docs/waveforms/pointer_wraparound.png)
+
+## Repo layout
+
+- `rtl/` — the FIFO and its AXI4-Stream wrapper
+- `sim/` — cocotb testbench, waveform script, and the Makefile that drives Icarus Verilog
+- `docs/waveforms/` — rendered waveform PNGs
