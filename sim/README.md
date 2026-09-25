@@ -1,6 +1,6 @@
 # Simulation (cocotb)
 
-Testbench for `rtl/Asynch_FIFO.sv` using cocotb + Icarus Verilog.
+Testbench for `rtl/Async_FIFO.sv` using cocotb + Icarus Verilog.
 
 ## Setup
 
@@ -36,7 +36,7 @@ make waves
 ```
 
 runs the full suite with waveform dumping on and renders
-`sim_build/Asynch_FIFO.png` from the dump.
+`sim_build/Async_FIFO.png` from the dump.
 
 ```
 ./generate_waveforms.sh
@@ -49,10 +49,10 @@ into `../docs/waveforms/`, which is what the top-level README embeds.
 To render an existing FST dump manually:
 
 ```
-fst2vcd sim_build/Asynch_FIFO.fst -o sim_build/Asynch_FIFO.vcd
-python3 render_waveforms.py sim_build/Asynch_FIFO.vcd out.png "title"
+fst2vcd sim_build/Async_FIFO.fst -o sim_build/Async_FIFO.vcd
+python3 render_waveforms.py sim_build/Async_FIFO.vcd out.png "title"
 ```
 
 ## Tests
 
-`test_asynch_fifo.py` holds the cocotb tests.
+`test_async_fifo.py` holds the cocotb tests.

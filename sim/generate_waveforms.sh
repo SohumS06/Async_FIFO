@@ -18,6 +18,6 @@ for testcase in "${!SCENARIOS[@]}"; do
     rm -rf sim_build results.xml
     make COCOTB_TESTCASE="$testcase" WAVES=1
 
-    fst2vcd sim_build/Asynch_FIFO.fst -o "sim_build/${outfile}.vcd"
+    fst2vcd sim_build/Async_FIFO.fst -o "sim_build/${outfile}.vcd"
     python3 render_waveforms.py "sim_build/${outfile}.vcd" "$OUT_DIR/${outfile}.png" "$title"
 done

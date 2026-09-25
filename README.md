@@ -6,11 +6,11 @@ This is a dual-clock (asynchronous) FIFO with an AXI4-Stream wrapper on top of i
 
 ## What's in here
 
-`rtl/Asynch_FIFO.sv` is the actual FIFO: a circular buffer with separate write and read pointers, one bit wider than needed to address the memory so wrapping the pointer around lets `full` and `empty` be told apart with simple pointer comparisons instead of a separate counter. Pointers are Gray-coded and synchronized across the `wr_clk`/`rd_clk` boundary with 2-flop synchronizers, and each domain resets independently. `DATA_WIDTH` and `DEPTH` are both parameters.
+`rtl/Async_FIFO.sv` is the actual FIFO: a circular buffer with separate write and read pointers, one bit wider than needed to address the memory so wrapping the pointer around lets `full` and `empty` be told apart with simple pointer comparisons instead of a separate counter. Pointers are Gray-coded and synchronized across the `wr_clk`/`rd_clk` boundary with 2-flop synchronizers, and each domain resets independently. `DATA_WIDTH` and `DEPTH` are both parameters.
 
-`rtl/asynch_FIFO_axi_stream.sv` wraps the FIFO in an AXI4-Stream slave/master interface — `s_axis_tvalid`/`s_axis_tready` on the write side, `m_axis_tvalid`/`m_axis_tready` on the read side — so `wr_en`/`rd_en` just become the AND of valid and ready on each side.
+`rtl/async_FIFO_axi_stream.sv` wraps the FIFO in an AXI4-Stream slave/master interface — `s_axis_tvalid`/`s_axis_tready` on the write side, `m_axis_tvalid`/`m_axis_tready` on the read side — so `wr_en`/`rd_en` just become the AND of valid and ready on each side.
 
-`sim/test_asynch_fifo.py` is the cocotb testbench. It covers reset behavior, basic write/read, filling and draining, gapless back-to-back writes and reads, overlapping writes and reads on independent clocks, pointer wraparound, and what happens if you assert `wr_en` while full or `rd_en` while empty (spoiler: nothing stops you, and it'll quietly corrupt data — there's no overflow/underflow protection in this design, so that's on whatever's driving it).
+`sim/test_async_fifo.py` is the cocotb testbench. It covers reset behavior, basic write/read, filling and draining, gapless back-to-back writes and reads, overlapping writes and reads on independent clocks, pointer wraparound, and what happens if you assert `wr_en` while full or `rd_en` while empty (spoiler: nothing stops you, and it'll quietly corrupt data — there's no overflow/underflow protection in this design, so that's on whatever's driving it).
 
 `sim/generate_waveforms.sh` runs a few of those tests in isolation with waveform dumping on and renders the signals to PNGs under `docs/waveforms/` via `sim/render_waveforms.py`.
 

@@ -6,10 +6,10 @@ PWD := $(shell pwd)
 DATA_WIDTH ?= 8
 DEPTH ?= 16
 
-VERILOG_SOURCES = $(PWD)/../rtl/Asynch_FIFO.sv
+VERILOG_SOURCES = $(PWD)/../rtl/Async_FIFO.sv
 
-TOPLEVEL = Asynch_FIFO
-MODULE = test_asynch_fifo
+TOPLEVEL = Async_FIFO
+MODULE = test_async_fifo
 
 COMPILE_ARGS += -P $(TOPLEVEL).DATA_WIDTH=$(DATA_WIDTH)
 COMPILE_ARGS += -P $(TOPLEVEL).DEPTH=$(DEPTH)
@@ -19,8 +19,8 @@ WAVES ?= 1
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
 waves: sim
-	fst2vcd sim_build/Asynch_FIFO.fst -o sim_build/Asynch_FIFO.vcd
-	python3 render_waveforms.py sim_build/Asynch_FIFO.vcd
+	fst2vcd sim_build/Async_FIFO.fst -o sim_build/Async_FIFO.vcd
+	python3 render_waveforms.py sim_build/Async_FIFO.vcd
 
 docs-waveforms:
 	./generate_waveforms.sh

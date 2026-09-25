@@ -1,4 +1,4 @@
-module Asynch_FIFO 
+module Async_FIFO
 
 #(
 	parameter DATA_WIDTH = 8,

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module asynch_FIFO_axi_stream
+module async_FIFO_axi_stream
 
 #(
     parameter DATA_WIDTH = 8,
@@ -24,7 +24,7 @@ module asynch_FIFO_axi_stream
     logic full_i;
     logic empty_i;
 
-    Asynch_FIFO #(
+    Async_FIFO #(
         .DATA_WIDTH(DATA_WIDTH),
         .DEPTH(DEPTH)
     ) inst (
