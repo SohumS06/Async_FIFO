@@ -59,11 +59,12 @@ module Asynch_FIFO
 	always_ff @(posedge rd_clk) begin
 		if (rd_reset_sync) rd_ptr <= 0;
     	else if (rd_en) begin
-    		rd_data <= memory[rd_ptr[PTR_WIDTH-2:0]];
-			rd_ptr <= rd_ptr + 1;
+    		rd_ptr <= rd_ptr + 1;
 		end
 	end
-	
+
+	assign rd_data = memory[rd_ptr[PTR_WIDTH-2:0]];
+
 	assign wr_ptr_gray = wr_ptr ^ (wr_ptr >> 1);
 	assign rd_ptr_gray = rd_ptr ^ (rd_ptr >> 1);
 	
@@ -89,6 +90,6 @@ module Asynch_FIFO
     	end
     end
 	
-	assign full = (wr_ptr_gray[PTR_WIDTH-1:PTR_WIDTH-2] == ~rd_ptr_gray_sync[PTR_WIDTH-1:PTR_WIDTH-2]) &d (wr_ptr_gray[PTR_WIDTH-3:0] == rd_ptr_gray_sync[PTR_WIDTH-3:0]);
+	assign full = (wr_ptr_gray[PTR_WIDTH-1:PTR_WIDTH-2] == ~rd_ptr_gray_sync[PTR_WIDTH-1:PTR_WIDTH-2]) && (wr_ptr_gray[PTR_WIDTH-3:0] == rd_ptr_gray_sync[PTR_WIDTH-3:0]);
 	assign empty = (rd_ptr_gray == wr_ptr_gray_sync);
 endmodule

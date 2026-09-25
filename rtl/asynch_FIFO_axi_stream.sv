@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 09/24/2026 01:37:43 PM
-// Design Name: 
-// Module Name: asynch_FIFO_axi_stream
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module asynch_FIFO_axi_stream
 
@@ -27,26 +7,39 @@ module asynch_FIFO_axi_stream
     parameter DEPTH = 16
 )
 (
+    input  logic s_axis_aclk,
+    input  logic s_axis_aresetn,
+    input  logic m_axis_aclk,
+    input  logic m_axis_aresetn,
 
-	input  logic clk,
-    input  logic rst_n,
-
-    // Slave side (write side - receiving data)
     input  logic [DATA_WIDTH-1:0] s_axis_tdata,
     input  logic                  s_axis_tvalid,
     output logic                  s_axis_tready,
 
-    // Master side (read side - sending data)
     output logic [DATA_WIDTH-1:0] m_axis_tdata,
     output logic                  m_axis_tvalid,
     input  logic                  m_axis_tready
     );
-    
+
     logic full_i;
     logic empty_i;
-    
-    FIFO inst(.clk(clk),.reset(~rst_n),.wr_data(s_axis_tdata),.wr_en(s_axis_tvalid & s_axis_tready),.full(full_i), .rd_data(m_axis_tdata), .rd_en(m_axis_tready & m_axis_tvalid), .empty(empty_i));
-    
+
+    Asynch_FIFO #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .DEPTH(DEPTH)
+    ) inst (
+        .wr_clk(s_axis_aclk),
+        .rd_clk(m_axis_aclk),
+        .wr_reset(~s_axis_aresetn),
+        .rd_reset(~m_axis_aresetn),
+        .wr_en(s_axis_tvalid & s_axis_tready),
+        .wr_data(s_axis_tdata),
+        .rd_en(m_axis_tready & m_axis_tvalid),
+        .rd_data(m_axis_tdata),
+        .full(full_i),
+        .empty(empty_i)
+    );
+
     assign s_axis_tready = ~full_i;
     assign m_axis_tvalid = ~empty_i;
 endmodule
