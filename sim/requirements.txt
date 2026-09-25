@@ -1,0 +1,6 @@
+cocotb>=1.8.0
+cocotb-bus>=0.2.1
+pytest>=7.0
+matplotlib>=3.5
+vcdvcd>=2.3
+numpy>=1.23
